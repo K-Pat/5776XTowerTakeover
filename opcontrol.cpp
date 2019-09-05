@@ -4,13 +4,23 @@
 #define LEFT_BACK 3
 #define RIGHT_BACK 8
 #define LIFT 4
+#define ANGLER 5
 
 pros::Motor Lf (LEFT_FRONT);
 pros::Motor Rf (RIGHT_FRONT, true); // This reverses the motor
 pros::Motor Lb (LEFT_BACK);
 pros::Motor Rb (RIGHT_BACK, true);
 pros::Motor lift (LIFT);
+pros::Motor angler (ANGLER);
 pros::Controller master (CONTROLLER_MASTER);
+
+void Angler(){
+	if(master.get_digital(DIGITAL_Y) == 1){
+		angler.move_velocity(100);
+	}else if(master.get_digital(DIGITAL_L1) == 1){
+		angler.move_velocity(-100);
+	}
+}
 
 void tankDrive() {
   Lf.move(master.get_analog(ANALOG_LEFT_Y));
@@ -60,6 +70,9 @@ void opcontrol() {
   while (true) {
     //tankDrive();
     arcadeDrive();
+		Macro1();
+		Macro2();
+		Angler();
     pros::delay(10);
   }
 }
