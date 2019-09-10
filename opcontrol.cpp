@@ -14,11 +14,16 @@ pros::Motor lift (LIFT);
 pros::Motor angler (ANGLER);
 pros::Controller master (CONTROLLER_MASTER);
 
+
+
 void Angler(){
-	if(master.get_digital(DIGITAL_Y) == 1){
-		angler.move_velocity(100);
+	if(master.get_digital(DIGITAL_L2) == 1){
+		angler.move(100);
 	}else if(master.get_digital(DIGITAL_L1) == 1){
-		angler.move_velocity(-100);
+		angler.move(-100);
+	}else{
+		angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+		angler.move_velocity(0);
 	}
 }
 
