@@ -5,6 +5,8 @@
 #define RIGHT_BACK 8
 #define LIFT 4
 #define ANGLER 5
+#define INTAKELEFT 6
+#define INTAKERIGHT 7
 
 pros::Motor Lf (LEFT_FRONT);
 pros::Motor Rf (RIGHT_FRONT, true); // This reverses the motor
@@ -12,9 +14,19 @@ pros::Motor Lb (LEFT_BACK);
 pros::Motor Rb (RIGHT_BACK, true);
 pros::Motor lift (LIFT);
 pros::Motor angler (ANGLER);
+pros::Motor intakeL (INTAKELEFT);
+pros::Motor intakeR (INTAKERIGHT);
 pros::Controller master (CONTROLLER_MASTER);
 
-
+void Intake(){
+	if(master.get_digital(DIGITAL_B) == 1){
+		intakeL.move(100);
+		intakeR.move(100);
+	}else{
+		intakeL.move(0);
+		intakeR.move(0);
+	}
+}
 
 void Angler(){
 	if(master.get_digital(DIGITAL_L2) == 1){
@@ -80,4 +92,4 @@ void opcontrol() {
 		Angler();
     pros::delay(10);
   }
-}
+// }ji7
