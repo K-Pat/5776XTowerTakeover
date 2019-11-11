@@ -117,17 +117,29 @@ void move(Point target){//move function that uses okapi's 2d motion profile
 
  void Macro(){
  	lift.tare_position();
- 	double constant = 0.2;
- 	double target = 3600;
+ 	double Kp = 0.2;//subject to testing (constant for Proportional)
+	double Ki = 0.2;//Subject to testing (constant for Integral)
+	double Kd = 0.2;//Subject to testing (constant for Derivative)
+ 	double target = 3600;//how far we need to go
+	double integral_max_value = 100;//Testing required
+	while(lift.get_position() < target){// Keeps the PID Going until target is reached
  	double position = lift.get_position();
- 	double error = target - position;
- 	double speed = constant*error;
- 	if(master.get_digital(DIGITAL_B)){
- 		while(error>0){
+ 	double error = target - position;//how far away the lift is from the target
+	double integral = integral + error;//running sum of the previous errors
+	if(error == 0){// makes it so the speed reaches zero when error equals zero
+		integral = 0;
+	}else{}
+	if(abs(integral) >= integral_max_value){//makes sure integral doesnt go farther than need be
+		integral = integral_max_value;
+	}else{}
+	double previous_error = error;
+	double derivative = error - previous_error;
+	double speed = (Kp*error) + (Ki*integral) + (Kd*derivative);// constantly slowing speed
+	if(master.get_digital(DIGITAL_B)){
  		lift.move(speed);
- 	}
  }else{
  	lift.move_velocity(0);
+ }
  }
  }
 
